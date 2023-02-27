@@ -31,7 +31,7 @@ kubectl apply -f ~/learnkubenetes/manifests/course1/pod-prod.yaml
 ### Step 3 : valide the lab
 Copy the next command in the shell
 ```bash
-echo "Get namespaces" && kubectl get namespaces --show-labels | grep -v "^kube" && \ 
+echo "Get namespaces" && kubectl get namespaces --show-labels | grep -v "^kube"  
 echo "\nGet pods"     && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
 ```
 
