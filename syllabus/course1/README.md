@@ -43,3 +43,7 @@ NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         
 development   devpod1      1/1     Running   0               148m    10.X.X.X   FQDN-node1  ...        app=devpod1
 production    prodpod1     1/1     Running   0               148m    10.Y.Y.Y   FQDN-node2  ...        app=prodpod1
 </pre>
+
+As you can see:
+- the pod **devpod1** is located in the **development** namespace, with the IP adress *10.X.X.X*
+- the pod **prodpod1** is located in the **production** namespace, with the IP adress *10.Y.Y.Y*
