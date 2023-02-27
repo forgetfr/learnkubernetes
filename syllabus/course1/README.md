@@ -39,9 +39,9 @@ It should return
 <pre>
 Get namespaces
 NAME              STATUS   AGE     LABELS
-default           Active   5d22h   kubernetes.io/metadata.name=default
-development       Active   162m    kubernetes.io/metadata.name=development,name=development
-production        Active   162m    kubernetes.io/metadata.name=production,name=production
+default           Active   TTTh    kubernetes.io/metadata.name=default
+development       Active   TTTm    kubernetes.io/metadata.name=development,name=development
+production        Active   TTTm    kubernetes.io/metadata.name=production,name=production
 
 Get pods
 NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         NODE        NO...TES   LABELS
@@ -83,14 +83,45 @@ Because each pod have it own DNS A record, both of them will be able to resolv e
 > **_NOTE:_**  If DNS is enabled (our case), pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
 > - 10-X-X-X.development.pod.cluster.local is the FQDN of **devpod1** 
 > - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of **prodpod1** 
+> Can we change the domain? We will discuss that in more detail in another course.
 ```bash
-root@devpod1:/# ip addr show eth0
-3: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
-    link/ether ae:43:e2:81:04:89 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 10.X.X.X/32 scope global eth0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::ac43:e2ff:fe81:489/64 scope link 
-       valid_lft forever preferred_lft forever
+root@devpod1:/# nslookup 10-X-X-X.development.pod.cluster.local
+Server:		10.152.183.10
+Address:	10.152.183.10#53
+
+Name:	10.X.X.X.development.pod.cluster.local
+Address: 10.X.X.X
+
+root@devpod1:/# nslookup 10-Y-Y-Y.production.pod.cluster.local
+Server:		10.152.183.10
+Address:	10.152.183.10#53
+
+Name:	10.Y.Y.Y.production.pod.cluster.local
+Address: 10.Y.Y.Y
 ```
+
+So, let see if  **devpod1** is capabled to *ping* and check if port *ssh* on **prodpod1** is available (don't forget, the two container are in different namespace).
+```bash
+root@devpod1:/# ping -c 2 10.Y.Y.Y
+PING 10.Y.Y.Y (10.Y.Y.Y) 56(84) bytes of data.
+64 bytes from 10.Y.Y.Y: icmp_seq=1 ttl=62 time=0.554 ms
+64 bytes from 10.Y.Y.Y: icmp_seq=2 ttl=62 time=0.661 ms
+
+--- 10.Y.Y.Y ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1008ms
+rtt min/avg/max/mdev = 0.554/0.607/0.661/0.053 ms
+
+root@devpod1:/# nmap 10.Y.Y.Y -p 22
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-27 16:38 EST
+Nmap scan report for 10.Y.Y.Y
+Host is up (0.00065s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 1 IP address (1 host up) scanned in 0.33 seconds
+```
+As you can see **devpod1** as not restriction on **prodpod1**
+
 
 
