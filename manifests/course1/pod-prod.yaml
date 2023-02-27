@@ -7,5 +7,5 @@ metadata:
     app: prodpod1
 spec:
   containers:
-  - name: ubgestdev
-    image: forgetfr/ubgest:latest
+  - name: prodctd1
+    image: forgetfr/mgmtnet:latest
