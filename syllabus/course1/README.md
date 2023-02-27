@@ -38,8 +38,8 @@ development       Active   162m    kubernetes.io/metadata.name=development,name=
 production        Active   162m    kubernetes.io/metadata.name=production,name=production
 
 Get pods
-NAMESPACE     NAME                                        READY   STATUS    RESTARTS        AGE     IP             NODE                      NOMINATED NODE   READINESS GATES   LABELS
-development   devpod1                                     1/1     Running   0               148m    10.1.54.71     node2-71.lab-inuvola.ca   <none>           <none>            app=devpod1
-production    prodpod1                                    1/1     Running   0               148m    10.1.83.158    node1-72                  <none>           <none>            app=prodpod1
+NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP             NODE                      NOMINATED NODE   READINESS GATES   LABELS
+development   devpod1      1/1     Running   0               148m    10.1.54.71     node2-71.lab-inuvola.ca   <none>           <none>            app=devpod1
+production    prodpod1     1/1     Running   0               148m    10.1.83.158    node1-72                  <none>           <none>            app=prodpod1
 
 </pre>
