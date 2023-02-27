@@ -29,9 +29,9 @@ Copy the next command
 echo "Get namespaces" && kubectl get namespaces --show-labels | grep -v "^kube" && \ 
 echo "\nGet pods"     && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
 ```
-
+dddd
 It should return
-<pre>
+
 Get namespaces
 NAME              STATUS   AGE     LABELS
 default           Active   5d22h   kubernetes.io/metadata.name=default
@@ -43,4 +43,3 @@ NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         
 <span style="color:blue">development</span>    devpod1      1/1     Running   0               148m    10.X.X.X   FQDN-node1  ...        app=devpod1
 <span style="color:green">production</span>     prodpod1     1/1     Running   0               148m    10.Y.Y.Y   FQDN-node2  ...        app=prodpod1
 
-</pre>
