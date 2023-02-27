@@ -57,15 +57,15 @@ As you can see:
 
 ## Exercice 1 : Testing the connectivity without policies (default behavior)
 
-In the shell, let kick-off a shell in the container **devprod1**. 
+In the shell, let kick-off a shell in the container **devpod1**. 
 
 ```bash
-kubectl exec --namespace=development --stdin --tty devprod1 -- /bin/bash
+kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
 ```
 
 - This container is based on Ubuntu and provide us a shell with some networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
-- As you can see, we explicit wrote down the namespace, because *kubectl* is setup by default to execute all the command in the default namespace. **devprod1** is not located in the default namespace. We will cover that more in detail in another course.
-- You will see that automatically, the prompt of the shell will display the user and the FQDN of the container (which is it name) in the format *user@FQDN*. In our case, it will be *root@devprod1*
+- As you can see, we explicit wrote down the namespace, because *kubectl* is setup by default to execute all the command in the default namespace. **devpod1** is not located in the default namespace. We will cover that more in detail in another course.
+- You will see that automatically, the prompt of the shell will display the user and the FQDN of the container (which is it name) in the format *user@FQDN*. In our case, it will be **root@devpod1**
 
 Let look at the container itself IP address, it shoulb be *10.X.X.X*
 
@@ -81,8 +81,8 @@ root@devpod1:/# ip addr show eth0
 Because each pod have it own DNS A record, both of them will be able to resolv each other.
 
 > **_NOTE:_**  If DNS is enabled (our case), pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
-> - 10-X-X-X.development.pod.cluster.local is the FQDN of *devpod1* 
-> - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of *prodpod1* 
+> - 10-X-X-X.development.pod.cluster.local is the FQDN of **devpod1** 
+> - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of **prodpod1** 
 ```bash
 root@devpod1:/# ip addr show eth0
 3: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
