@@ -38,8 +38,8 @@ development       Active   162m    kubernetes.io/metadata.name=development,name=
 production        Active   162m    kubernetes.io/metadata.name=production,name=production
 
 Get pods
-NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         NODE        NOMINATED NODE   READINESS GATES   LABELS
-development   devpod1      1/1     Running   0               148m    10.X.X.X   FQDN-node1   <none>           <none>            app=devpod1
-production    prodpod1     1/1     Running   0               148m    10.Y.Y.Y   FQDN-node2   <none>           <none>            app=prodpod1
+NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         NODE        NO...TES   LABELS
+development   devpod1      1/1     Running   0               148m    10.X.X.X   FQDN-node1  ...        app=devpod1
+production    prodpod1     1/1     Running   0               148m    10.Y.Y.Y   FQDN-node2  ...        app=prodpod1
 
 </pre>
