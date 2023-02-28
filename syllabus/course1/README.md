@@ -59,8 +59,8 @@ production    prodpod1-deployment-676dc4948b-4d48z   1/1     Running   0        
 </pre>
 
 As you can see:
-- the pod **devpod1** is located in the **development** namespace, with the IP adress *10.X.X.X*
-- the pod **prodpod1** is located in the **production** namespace, with the IP adress *10.Y.Y.Y*
+- the pod **devpod1\*** is located in the **development** namespace, with the IP adress *10.X.X.X*
+- the pod **prodpod1\*** is located in the **production** namespace, with the IP adress *10.Y.Y.Y*
 
 > **_NOTE:_**  10.X.X.X and 10.Y.Y.Y should be replace by your values. 
 
