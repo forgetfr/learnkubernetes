@@ -1,0 +1,2 @@
+echo "Get namespaces" && kubectl get namespaces --show-labels | grep -v "^kube"  
+echo "\nGet pods"     && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
