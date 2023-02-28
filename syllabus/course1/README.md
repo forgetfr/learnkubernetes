@@ -109,7 +109,7 @@ Address:	10.152.183.10#53
 Name:	10-1-54-75.production.pod.cluster.local
 Address: 10.1.54.75
 ```
-
+dddddd
 At this point, without any network policies, all pods **devpod1-deployment-\*** is capabled to *ping* and connect to port *ssh* on any pods in **prodpod1-deployment-\*** even if their are in different namespace).
 ```bash
 # ping 
