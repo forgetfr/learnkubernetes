@@ -57,7 +57,7 @@ As you can see:
 
 ## Exercice 1 : Testing the connectivity without policies (default behavior)
 
-In the shell, let kick-off a shell in the container **devpod1**. 
+Let kick-off a shell in the container **devpod1**. 
 
 ```bash
 kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
