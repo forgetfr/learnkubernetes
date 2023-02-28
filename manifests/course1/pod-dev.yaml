@@ -8,4 +8,4 @@ metadata:
 spec:
   containers:
   - name: devctd1
-    image: forgetfr/mgmtnet:latest
+    image: capso/capsonet:latest
