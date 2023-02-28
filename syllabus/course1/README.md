@@ -59,17 +59,17 @@ production    prodpod1-deployment-676dc4948b-4d48z   1/1     Running   0        
 </pre>
 
 As you can see:
-- the pod **devpod1\*** is located in the **development** namespace, with the IP adress *10.X.X.X*
-- the pod **prodpod1\*** is located in the **production** namespace, with the IP adress *10.Y.Y.Y*
+- pods **devpod1-deployment-\*** belong to the **devpod1-deployment** and are located in the **development** namespace
+- pods **prodpod1-deployment-\*** belong to the **prodpod1-deployment** and are located in the **production** namespace
 
-> **_NOTE:_**  10.X.X.X and 10.Y.Y.Y should be replace by your values. 
+> **_NOTE:_**  IPs are related to the cluster. You should get something different. 
 
 ## Exercice 1 : Testing the connectivity without policies (default behavior)
 
-Let kick-off a shell in the container **devpod1**. 
+Let kick-off a shell in a pod belong to **devpod1-deployment**. 
 
 ```bash
-kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
+kubectl exec --namespace=development --stdin --tty devpod1-deployment-7bbf94b866-9zhbm  -- /bin/bash
 ```
 > **_NOTE:_** 
 >
@@ -78,10 +78,10 @@ kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
 Let look at the container itself IP address, it shoulb be *10.X.X.X*
 
 ```bash
-root@devpod1:/# ip addr show eth0
+root@devpod1-deployment-7bbf94b866-9zhbm :/# ip addr show eth0
 3: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
     link/ether ae:43:e2:81:04:89 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 10.X.X.X/32 scope global eth0
+    inet 10.1.83.164/32 scope global eth0
        valid_lft forever preferred_lft forever
     inet6 fe80::ac43:e2ff:fe81:489/64 scope link 
        valid_lft forever preferred_lft forever
@@ -95,42 +95,65 @@ Because each pod have it own DNS A record, both of them will be able to resolv e
 > - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of **prodpod1** 
 > Can we change the domain? We will discuss that in more detail in another course.
 ```bash
-root@devpod1:/# nslookup 10-X-X-X.development.pod.cluster.local
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nslookup 10-1-83-164.development.pod.cluster.local
 Server:		10.152.183.10
 Address:	10.152.183.10#53
 
-Name:	10.X.X.X.development.pod.cluster.local
-Address: 10.X.X.X
+Name:	10-1-83-164.development.pod.cluster.local
+Address: 10.1.83.164
 
-root@devpod1:/# nslookup 10-Y-Y-Y.production.pod.cluster.local
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nslookup 10-1-54-75.production.pod.cluster.local
 Server:		10.152.183.10
 Address:	10.152.183.10#53
 
-Name:	10.Y.Y.Y.production.pod.cluster.local
-Address: 10.Y.Y.Y
+Name:	10-1-54-75.production.pod.cluster.local
+Address: 10.1.54.75
 ```
 
-At this point, wihout any network policies, **devpod1** is capabled to *ping* and connect to port *ssh* on **prodpod1** even if the two pods are in different namespace).
+At this point, without any network policies, all pods **devpod1-deployment-\*** is capabled to *ping* and connect to port *ssh* on any pods in **prodpod1-deployment-\*** even if their are in different namespace).
 ```bash
-root@devpod1:/# ping -c 2 10.Y.Y.Y
-PING 10.Y.Y.Y (10.Y.Y.Y) 56(84) bytes of data.
-64 bytes from 10.Y.Y.Y: icmp_seq=1 ttl=62 time=0.554 ms
-64 bytes from 10.Y.Y.Y: icmp_seq=2 ttl=62 time=0.661 ms
+# ping 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
+PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=1 ttl=62 time=0.520 ms
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=2 ttl=62 time=0.583 ms
 
---- 10.Y.Y.Y ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1008ms
-rtt min/avg/max/mdev = 0.554/0.607/0.661/0.053 ms
+--- 10-1-54-75.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+rtt min/avg/max/mdev = 0.520/0.551/0.583/0.031 ms
 
-root@devpod1:/# nmap 10.Y.Y.Y -p 22
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-27 16:38 EST
-Nmap scan report for 10.Y.Y.Y
-Host is up (0.00065s latency).
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
+PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=1 ttl=63 time=0.031 ms
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=2 ttl=63 time=0.055 ms
+
+--- 10-1-83-165.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+rtt min/avg/max/mdev = 0.031/0.043/0.055/0.012 ms
+
+# valide port 22 is reachable 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
+Host is up (0.00067s latency).
 
 PORT   STATE SERVICE
 22/tcp open  ssh
 
-Nmap done: 1 IP address (1 host up) scanned in 0.33 seconds
+Nmap done: 1 IP address (1 host up) scanned in 0.32 seconds
+root@devpod1-deployment-7bbf94b866-9zhbm:/# 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -p 22
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+Nmap scan report for 10-1-83-165.production.pod.cluster.local (10.1.83.165)
+Host is up (0.000055s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 ```
+
 As you can see **devpod1** as no restriction on **prodpod1**
 
 
@@ -156,4 +179,4 @@ As soon as you have a *NetworkPolicies* that selects a certain group of Pods, th
 > 
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
 
-
+kubectl create -f manifests/course1/netpo-dev.yaml
