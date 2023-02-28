@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpod1 
+  namespace: development
+  labels:
+    app: devpod1
+spec:
+  replicas: 2
+  selector:
+    matchlabels:
+      app: devpod1
+  template:
+    metadata: 
+      labels:
+        app: devpod1
+  spec:
+    containers:
+    - name: devctd1
+      image: capso/capsonet:latest
+      imagePullPolicy: Always
