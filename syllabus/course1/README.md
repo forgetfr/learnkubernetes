@@ -51,11 +51,11 @@ development   devpod1-deployment          2/2     2            2           Ss   
 production    prodpod1-deployment         2/2     2            2           Ss     prodctd1     capso/capsonet:latest   app=prodpod1     app=prodpod1
 
 Get pods
-NAMESPACE     NAME                                        READY   STATUS    RESTARTS  AGE  IP             NODE     NO..ES   LABELS
-development   devpod1-deployment-7bbf94b866-9zhbm         1/1     Running   0         35m  10.1.83.164    NODE_A   <none>   app=devpod1,pod-template-hash=7bbf94b866
-development   devpod1-deployment-7bbf94b866-5mq5x         1/1     Running   0         35m  10.1.54.74     NODE_B   <none>   app=devpod1,pod-template-hash=7bbf94b866
-production    prodpod1-deployment-676dc4948b-xmf5v        1/1     Running   0         53s  10.1.83.165    NODE_A   <none>   app=prodpod1,pod-template-hash=676dc4948b
-production    prodpod1-deployment-676dc4948b-4d48z        1/1     Running   0         53s  10.1.54.75     NODE_B   <none>   app=prodpod1,pod-template-hash=676dc4948b
+NAMESPACE     NAME                                   READY   STATUS    RESTARTS  AGE  IP             NODE     LABELS
+development   devpod1-deployment-7bbf94b866-9zhbm    1/1     Running   0         35m  10.1.83.164    NODE_A   app=devpod1,pod-template-hash=7bbf94b866
+development   devpod1-deployment-7bbf94b866-5mq5x    1/1     Running   0         35m  10.1.54.74     NODE_B   app=devpod1,pod-template-hash=7bbf94b866
+production    prodpod1-deployment-676dc4948b-xmf5v   1/1     Running   0         53s  10.1.83.165    NODE_A   app=prodpod1,pod-template-hash=676dc4948b
+production    prodpod1-deployment-676dc4948b-4d48z   1/1     Running   0         53s  10.1.54.75     NODE_B   app=prodpod1,pod-template-hash=676dc4948b
 </pre>
 
 As you can see:
