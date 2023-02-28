@@ -5,7 +5,7 @@ By default, in kubernetes everything is opened. This course will let you underst
 
 ## Prerequisite
 
-At this point, you should have acces to a kubernetes environment with at least two nodes.
+At this point, you should have acces to a kubernetes environment with two nodes (called NODE_A and NODE_B).
 Please read the following instructions on this channel to set up a secure kubernetes virtual environment with a devkit.
 
 ## The Lab
@@ -19,35 +19,43 @@ kubectl create -f ~/learnkubenetes/manifests/course1/namespace-dev.yaml
 kubectl create -f ~/learnkubenetes/manifests/course1/namespace-prod.yaml
 ```
 
-### Step 2 : create a container inside each namespace
+### Step 2 : deploy two pods on each namespace
 
 ```bash
 # create the DEV pod
-kubectl apply -f ~/learnkubenetes/manifests/course1/pod-dev.yaml
+kubectl apply -f ~/learnkubenetes/manifests/course1/deploy-dev.yaml
 # create the PROD pod
-kubectl apply -f ~/learnkubenetes/manifests/course1/pod-prod.yaml
+kubectl apply -f ~/learnkubenetes/manifests/course1/deploy-prod.yaml
 ```
 The containers are based on Ubuntu and provide networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
 
 ### Step 3 : valide the lab
-Copy the next command in the shell
+Copy the next command in the shell (or *bin/k8s-envls* if you clone the entire repository)
 ```bash
-echo "Get namespaces" && kubectl get namespaces --show-labels | grep -v "^kube"  
-echo "\nGet pods"     && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
+echo "Get namespaces"     && kubectl get namespaces --show-labels | grep -v "^kube"  
+echo "\nGet deployments"  && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
+echo "\nGet pods"         && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
 ```
 
 It should return
 <pre>
 Get namespaces
-NAME              STATUS   AGE     LABELS
-default           Active   TTTh    kubernetes.io/metadata.name=default
-development       Active   TTTm    kubernetes.io/metadata.name=development,name=development
-production        Active   TTTm    kubernetes.io/metadata.name=production,name=production
+NAME              STATUS   AGE    LABELS
+default           Active   7d2h   kubernetes.io/metadata.name=default
+development       Active   30h    kubernetes.io/metadata.name=development,name=development
+production        Active   30h    kubernetes.io/metadata.name=production,name=production
+
+Get deployments
+NAMESPACE     NAME                        READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES                  SELECTOR         LABELS
+development   devpod1-deployment          2/2     2            2           Ss     devctd1      capso/capsonet:latest   app=devpod1      app=devpod1
+production    prodpod1-deployment         2/2     2            2           Ss     prodctd1     capso/capsonet:latest   app=prodpod1     app=prodpod1
 
 Get pods
-NAMESPACE     NAME         READY   STATUS    RESTARTS        AGE     IP         NODE        NO...TES   LABELS
-development   devpod1      1/1     Running   0               TTTm    10.X.X.X   FQDN-node1  ...        app=devpod1
-production    prodpod1     1/1     Running   0               TTTm    10.Y.Y.Y   FQDN-node2  ...        app=prodpod1
+NAMESPACE     NAME                                        READY   STATUS    RESTARTS  AGE  IP             NODE     NO..ES   LABELS
+development   devpod1-deployment-7bbf94b866-9zhbm         1/1     Running   0         35m  10.1.83.164    NODE_A   <none>   app=devpod1,pod-template-hash=7bbf94b866
+development   devpod1-deployment-7bbf94b866-5mq5x         1/1     Running   0         35m  10.1.54.74     NODE_B   <none>   app=devpod1,pod-template-hash=7bbf94b866
+production    prodpod1-deployment-676dc4948b-xmf5v        1/1     Running   0         53s  10.1.83.165    NODE_A   <none>   app=prodpod1,pod-template-hash=676dc4948b
+production    prodpod1-deployment-676dc4948b-4d48z        1/1     Running   0         53s  10.1.54.75     NODE_B   <none>   app=prodpod1,pod-template-hash=676dc4948b
 </pre>
 
 As you can see:
@@ -63,7 +71,9 @@ Let kick-off a shell in the container **devpod1**.
 ```bash
 kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
 ```
-> **_NOTE:_** We explicit wrote down the --namespace=development, because **devpod1** is not located in the --namespace=default. We will cover more in details *kubectl* in another course.
+> **_NOTE:_** 
+>
+>We explicit wrote down the --namespace=development, because **devpod1** is not located in the --namespace=default. We will cover more in details *kubectl* in another course.
 
 Let look at the container itself IP address, it shoulb be *10.X.X.X*
 
@@ -78,7 +88,9 @@ root@devpod1:/# ip addr show eth0
 ```
 Because each pod have it own DNS A record, both of them will be able to resolv each other.
 
-> **_NOTE:_**  Pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
+> **_NOTE:_**  
+>
+>Pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
 > - 10-X-X-X.development.pod.cluster.local is the FQDN of **devpod1** 
 > - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of **prodpod1** 
 > Can we change the domain? We will discuss that in more detail in another course.
@@ -138,6 +150,10 @@ When defining a pod- or namespace- based *NetworkPolicies*, you use a selector t
 
 As soon as you have a *NetworkPolicies* that selects a certain group of Pods, those Pods become isolated and reject any traffic that is not allowed by any *NetworkPolicies*.
 
-> **_NOTE:_**  that *NetworkPolicies* are additive, so having two *NetworkPolicies* that select the same Pods will result in allowing both defined policies.
+> **_NOTE:_**
+>
+> *NetworkPolicies* are additive, so having two *NetworkPolicies* that select the same Pods will result in allowing both defined policies.
 > 
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
+
+
