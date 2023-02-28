@@ -62,10 +62,10 @@ Let kick-off a shell in the container **devpod1**.
 ```bash
 kubectl exec --namespace=development --stdin --tty devpod1 -- /bin/bash
 ```
-
-- This container is based on Ubuntu and provide us a shell with some networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
-- As you can see, we explicit wrote down the namespace, because *kubectl* is setup by default to execute all the command in the default namespace. **devpod1** is not located in the default namespace. We will cover that more in detail in another course.
-- You will see that automatically, the prompt of the shell will display the user and the FQDN of the container (which is it name) in the format *user@FQDN*. In our case, it will be **root@devpod1**
+This container is based on Ubuntu and provide us a shell with some networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
+> **_NOTE:_**
+> - As you can see, we explicit wrote down the namespace, because *kubectl* is setup by default to execute all the command in the default namespace. **devpod1** is not located in the default namespace. We will cover that more in detail in another course.
+> - You will see that automatically, the prompt of the shell will display the user and the FQDN of the container (which is it name) in the format *user@FQDN*. In our case, it will be **root@devpod1**
 
 Let look at the container itself IP address, it shoulb be *10.X.X.X*
 
