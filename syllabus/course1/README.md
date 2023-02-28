@@ -1,4 +1,4 @@
-# Network in kubernetes
+# Policies network in kubernetes
 
 ## Summary: 
 By default, in kubernetes everything is opened. This course will let you understand the steps you need to isolated communication within a namespace.
@@ -78,7 +78,7 @@ root@devpod1:/# ip addr show eth0
 ```
 Because each pod have it own DNS A record, both of them will be able to resolv each other.
 
-> **_NOTE:_**  If DNS is enabled (our case), pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
+> **_NOTE:_**  Pods are assigned a DNS A record in the form of pod-ip-address.my-namespace.pod.cluster.local . For example, a pod with IP 172.12.3.4 in the namespace default with a DNS name of cluster.local would have an entry of the form 172–12–3–4.default.pod.cluster.local. In our cases:
 > - 10-X-X-X.development.pod.cluster.local is the FQDN of **devpod1** 
 > - 10-Y-Y-Y.production.pod.cluster.local is the FQDN of **prodpod1** 
 > Can we change the domain? We will discuss that in more detail in another course.
@@ -98,7 +98,7 @@ Name:	10.Y.Y.Y.production.pod.cluster.local
 Address: 10.Y.Y.Y
 ```
 
-So, let see if  **devpod1** is capabled to *ping* and check if port *ssh* on **prodpod1** is available (don't forget, the two container are in different namespace).
+At this point, wihout any network policies, **devpod1** is capabled to *ping* and connect to port *ssh* on **prodpod1** even if the two pods are in different namespace).
 ```bash
 root@devpod1:/# ping -c 2 10.Y.Y.Y
 PING 10.Y.Y.Y (10.Y.Y.Y) 56(84) bytes of data.
@@ -119,7 +119,7 @@ PORT   STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 0.33 seconds
 ```
-As you can see **devpod1** as not restriction on **prodpod1**
+As you can see **devpod1** as no restriction on **prodpod1**
 
 
 
