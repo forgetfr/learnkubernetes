@@ -1,4 +1,4 @@
-# Policies network in kubernetes
+# Network Policies in kubernetes
 
 ## Summary: 
 By default, in kubernetes everything is opened. This course will let you understand the steps you need to isolated communication within a namespace.
@@ -122,4 +122,22 @@ Nmap done: 1 IP address (1 host up) scanned in 0.33 seconds
 As you can see **devpod1** as no restriction on **prodpod1**
 
 
+## Exercice 2 : Blocking cross namespaces communication
 
+Namespaces are “hidden” from each other, but they are not fully isolated by default. In the previous exercice, we saw  a pod in one Namespace can talk to a pod in another Namespace. This can often be very useful, for example to have your team’s pods in your Namespace communicate with another team’s pods in another Namespace. Generally, we want to control the communications with *NetworkPolicies*. 
+
+*NetworkPolicies* are an **application-centric** construct which allow you to specify how a "entitie" is allowed to communicate with various network "entities" over the network. *NetworkPolicies* apply to a connection with a pod on one or both ends, and are not relevant to other connections.
+
+The entities that a Pod can communicate with are identified through a combination of the following 3 identifiers:
+
+- Other pods that are allowed (exception: a pod cannot block access to itself) 
+- Namespaces that are allowed
+- IP blocks (exception: traffic to and from the node where a Pod is running is always allowed, regardless of the IP address of the Pod or the node)
+
+When defining a pod- or namespace- based *NetworkPolicies*, you use a selector to specify what traffic is allowed to and from the Pod(s) that match the selector.
+
+As soon as you have a *NetworkPolicies* that selects a certain group of Pods, those Pods become isolated and reject any traffic that is not allowed by any *NetworkPolicies*.
+
+> **_NOTE:_**  that *NetworkPolicies* are additive, so having two *NetworkPolicies* that select the same Pods will result in allowing both defined policies.
+> 
+> Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
