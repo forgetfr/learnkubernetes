@@ -117,7 +117,7 @@ At this point, without any network policies, all pods **devpod1-deployment-\*** 
 <tr>
 
 <th>
- devpod1-*(prodpod1-...-4d48z) = TRUE
+ devpod1-*.ping(prodpod1-*) = :heavy_check_mark:
 </th>
 
 <th>
