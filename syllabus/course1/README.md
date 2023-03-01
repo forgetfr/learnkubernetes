@@ -115,11 +115,11 @@ At this point, without any network policies, all pods **devpod1-\*** is capabled
 <table>
 <tr>
 <th>
- devpod1-*.ping(prodpod1-*) = :heavy_check_mark:
+devpod1-*.ping(prodpod1-*) = :heavy_check_mark:
 </th>
 <th>
+devpod1-*.nmap(prodpod1-*,22) = :heavy_check_mark:
 </th>
- devpod1-*.nmap(prodpod1-*,22) = :heavy_check_mark:
 </tr>
 <tr>
 <td>
