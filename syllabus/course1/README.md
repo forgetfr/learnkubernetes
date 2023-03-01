@@ -132,7 +132,8 @@ PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
 
 --- 10-1-54-75.production.pod.cluster.local ping statistics ---
 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
-rtt min/avg/max/mdev = 0.520/0.551/0.583/0.031 ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
 PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
@@ -141,7 +142,7 @@ PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data
 
 --- 10-1-83-165.production.pod.cluster.local ping statistics ---
 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
-rtt min/avg/max/mdev = 0.031/0.043/0.055/0.012 ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
 </td>
@@ -155,7 +156,8 @@ Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
 Host is up (0.00067s latency).
 
 PORT   STATE SERVICE
-22/tcp open  ssh   <------------------------------------------------
+22/tcp open  ssh 
+^^^^^^^^^^^^^^^^^
 
 Nmap done: 1 IP address (1 host up) scanned in 0.32 seconds
 
@@ -165,7 +167,8 @@ Nmap scan report for 10-1-83-165.production.pod.cluster.local (10.1.83.165)
 Host is up (0.000055s latency).
 
 PORT   STATE SERVICE
-22/tcp open  ssh   <------------------------------------------------
+22/tcp open  ssh 
+^^^^^^^^^^^^^^^^^
 
 Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 ```
