@@ -114,17 +114,15 @@ Name:	10-1-54-75.production.pod.cluster.local
 Address: 10.1.54.75
 ```
 
-As you can see **devpod1** as no restriction on **prodpod1**
-
 At this point, all pods in **devpod1-deployment** as no restrictions on any pods in **prodpod1-deployment**. The following table illustrates communications (*ping* and *"ssh"*) between the pods **devpod1-deployment-7bbf94b866-9zhbm** and the two pods in **prodpod1-deployment**.
 
 <table>
 <tr>
 <th>
-devpod1-*.ping(prodpod1-*) = :heavy_check_mark:
+devpods can ping prodpods :heavy_check_mark:
 </th>
 <th>
-devpod1-*.nmap(prodpod1-*,22) = :heavy_check_mark:
+devpods can knock at prodpods door (like 22) :heavy_check_mark:
 </th>
 </tr>
 <tr>
@@ -205,11 +203,15 @@ As soon as you have a *NetworkPolicies* that selects a certain group of Pods, th
 > 
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
 
+
 ```bash
 kubectl create -f ~/learnkubenetes/manifests/course1/netpo-dev.yaml
 kubectl create -f ~/learnkubenetes/manifests/course1/netpo-prod.yaml
 ```
 
+From now all pods in **devpod1-deployment** are restricted on all pods in **prodpod1-deployment** and vice versa. 
+
+The following table illustrates the pods **devpod1-deployment-7bbf94b866-9zhbm** cannot communicate with the two pods in **prodpod1-deployment**.
 <table>
 <tr>
 <th>
@@ -230,6 +232,50 @@ PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
 2 packets transmitted, 0 received, 100% packet loss, time 1007ms
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local
+PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
+
+--- 10-1-83-165.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1027ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+</td>
+
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:13 EST
+
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:42 EST
+
+```
+
+</td>
+</tr>
+</table>
+
+And vice versa, **prodpod1-deployment-676dc4948b-xmf5v** cannot communicate with the two pods in **devpod1-deployment**.
+<table>
+<tr>
+<th>
+prodpod1-*.ping(devpod1-*) = :x:
+</th>
+<th>
+prodpod1-*.nmap(devpod1-*,22) = :x:
+</th>
+</tr>
+<tr>
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
+PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
+
+--- 10-1-54-75.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1007ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local
 PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
@@ -243,27 +289,16 @@ PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data
 <td>
 
 ```bash
-root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22 -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:09 EST
+root@devpod1-deployment-7bbf94b866-5mq5x:/# nmap 10-1-54-75.production.pod.cluster.local -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:55 EST
 Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
-Host is up.
+Host is up.  <--- normal, we use -Pn
+All 1000 scanned ports on 10-1-54-75.production.pod.cluster.local (10.1.54.75) are filtered
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-PORT   STATE    SERVICE
-22/tcp filtered ssh
-^^^^^^^^^^^^^^^^^^^
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:42 EST
 
-Nmap done: 1 IP address (1 host up) scanned in 2.09 seconds
-
-root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -p 22 -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:09 EST
-Nmap scan report for 10-1-83-165.production.pod.cluster.local (10.1.83.165)
-Host is up.
-
-PORT   STATE    SERVICE
-22/tcp filtered ssh
-^^^^^^^^^^^^^^^^^^^
-
-Nmap done: 1 IP address (1 host up) scanned in 2.14 seconds
 ```
 
 </td>
