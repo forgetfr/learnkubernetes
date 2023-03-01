@@ -30,11 +30,12 @@ kubectl apply -f ~/learnkubenetes/manifests/course1/deploy-prod.yaml
 The containers are based on Ubuntu and provide networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
 
 ### Step 3 : valide the lab
-Copy the next command in the shell (or *bin/k8s-envls* if you clone the entire repository)
+Copy the next command in the shell (or *bin/k8s-envls* if you have cloned the entire repository)
 ```bash
-echo "Get namespaces"     && kubectl get namespaces --show-labels | grep -v "^kube"  
-echo "\nGet deployments"  && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
-echo "\nGet pods"         && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
+echo "Get namespaces"           && kubectl get namespaces --show-labels | grep -v "^kube"  
+echo "\nGet deployments"        && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
+echo "\nGet pods"               && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
+echo "\nGet network policies"   && kubectl get networkpolicies.networking.k8s.io -A
 ```
 
 It should return
@@ -56,6 +57,9 @@ development   devpod1-deployment-7bbf94b866-9zhbm    1/1     Running   0        
 development   devpod1-deployment-7bbf94b866-5mq5x    1/1     Running   0         35m  10.1.54.74     NODE_B   app=devpod1,pod-template-hash=7bbf94b866
 production    prodpod1-deployment-676dc4948b-xmf5v   1/1     Running   0         53s  10.1.83.165    NODE_A   app=prodpod1,pod-template-hash=676dc4948b
 production    prodpod1-deployment-676dc4948b-4d48z   1/1     Running   0         53s  10.1.54.75     NODE_B   app=prodpod1,pod-template-hash=676dc4948b
+
+Get network policies
+No resources found
 </pre>
 
 As you can see:
@@ -201,8 +205,10 @@ As soon as you have a *NetworkPolicies* that selects a certain group of Pods, th
 > 
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
 
-kubectl create -f manifests/course1/netpo-dev.yaml
-
+```bash
+kubectl create -f ~/learnkubenetes/manifests/course1/netpo-dev.yaml
+kubectl create -f ~/learnkubenetes/manifests/course1/netpo-prod.yaml
+```
 
 <table>
 <tr>
@@ -219,50 +225,45 @@ devpod1-*.nmap(prodpod1-*,22) = :x:
 ```bash
 root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
 PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
-64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=1 ttl=62 time=0.520 ms
-64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=2 ttl=62 time=0.583 ms
 
 --- 10-1-54-75.production.pod.cluster.local ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1003ms
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 packets transmitted, 0 received, 100% packet loss, time 1007ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local
 PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
-64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=1 ttl=63 time=0.031 ms
-64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=2 ttl=63 time=0.055 ms
 
 --- 10-1-83-165.production.pod.cluster.local ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1003ms
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 packets transmitted, 0 received, 100% packet loss, time 1027ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
-
 </td>
 
 <td>
 
 ```bash
-root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22 -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:09 EST
 Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
-Host is up (0.00067s latency).
+Host is up.
 
-PORT   STATE SERVICE
-22/tcp open  ssh 
-^^^^^^^^^^^^^^^^^
+PORT   STATE    SERVICE
+22/tcp filtered ssh
+^^^^^^^^^^^^^^^^^^^
 
-Nmap done: 1 IP address (1 host up) scanned in 0.32 seconds
+Nmap done: 1 IP address (1 host up) scanned in 2.09 seconds
 
-root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -p 22
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -p 22 -Pn
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:09 EST
 Nmap scan report for 10-1-83-165.production.pod.cluster.local (10.1.83.165)
-Host is up (0.000055s latency).
+Host is up.
 
-PORT   STATE SERVICE
-22/tcp open  ssh 
-^^^^^^^^^^^^^^^^^
+PORT   STATE    SERVICE
+22/tcp filtered ssh
+^^^^^^^^^^^^^^^^^^^
 
-Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
+Nmap done: 1 IP address (1 host up) scanned in 2.14 seconds
 ```
 
 </td>
