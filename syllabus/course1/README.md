@@ -202,3 +202,69 @@ As soon as you have a *NetworkPolicies* that selects a certain group of Pods, th
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
 
 kubectl create -f manifests/course1/netpo-dev.yaml
+
+
+<table>
+<tr>
+<th>
+devpod1-*.ping(prodpod1-*) = :cross_mark:
+</th>
+<th>
+devpod1-*.nmap(prodpod1-*,22) = :cross_mark:
+</th>
+</tr>
+<tr>
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
+PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=1 ttl=62 time=0.520 ms
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=2 ttl=62 time=0.583 ms
+
+--- 10-1-54-75.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
+PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=1 ttl=63 time=0.031 ms
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=2 ttl=63 time=0.055 ms
+
+--- 10-1-83-165.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+
+</td>
+
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
+Host is up (0.00067s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh 
+^^^^^^^^^^^^^^^^^
+
+Nmap done: 1 IP address (1 host up) scanned in 0.32 seconds
+
+root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -p 22
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-02-28 18:20 EST
+Nmap scan report for 10-1-83-165.production.pod.cluster.local (10.1.83.165)
+Host is up (0.000055s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh 
+^^^^^^^^^^^^^^^^^
+
+Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
+```
+
+</td>
+</tr>
+</table>
