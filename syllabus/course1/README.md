@@ -115,7 +115,7 @@ At this point, without any network policies, all pods **devpod1-deployment-\*** 
 <tr>
 
 <th>
-:heavy_check_mark: devpod1-...-9zhbm -- ping --> prodpod1-...-4d48z
+ devpod1-...-9zhbm -- ping :heavy_check_mark: --> prodpod1-...-4d48z
 </th>
 
 <th>
