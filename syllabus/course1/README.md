@@ -110,7 +110,9 @@ Name:	10-1-54-75.production.pod.cluster.local
 Address: 10.1.54.75
 ```
 
-At this point, without any network policies, all pods **devpod1-\*** is capabled to *ping* and knock to port *ssh* on any pods in **prodpod1-\*** even if their are in different namespace).
+As you can see **devpod1** as no restriction on **prodpod1**
+
+At this point, all pods in **devpod1-deployment** as no restrictions on any pods in **prodpod1-deployment**. The following table illustrates communications (*ping* and *"ssh"*) between the pods **devpod1-deployment-7bbf94b866-9zhbm** and the two pods **prodpod1-deployment**.
 
 <table>
 <tr>
@@ -176,11 +178,6 @@ Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 </td>
 </tr>
 </table>
-
-
-
-As you can see **devpod1** as no restriction on **prodpod1**
-
 
 ## Exercice 2 : Blocking cross namespaces communication
 
