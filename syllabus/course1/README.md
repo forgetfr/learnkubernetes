@@ -207,10 +207,10 @@ kubectl create -f manifests/course1/netpo-dev.yaml
 <table>
 <tr>
 <th>
-devpod1-*.ping(prodpod1-*) = :cross_mark:
+devpod1-*.ping(prodpod1-*) = :x:
 </th>
 <th>
-devpod1-*.nmap(prodpod1-*,22) = :cross_mark:
+devpod1-*.nmap(prodpod1-*,22) = :x:
 </th>
 </tr>
 <tr>
