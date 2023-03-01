@@ -214,10 +214,26 @@ metadata:
 spec:
   podSelector: {} #<--- means all pods inside the namespace
   policyTypes:
-  - Ingress #<--- by keeping the list empty, means block all incoming ports. 
+  - Ingress #<--- by keeping the list empty, means block all incoming communications regardless the ports. 
 #By ommitting Egress, means accept all outgoing communication
 ```
+This policy will denied all incoming connexions (Ingress), but will not block all outgoing connexions (Egress)
 
+The same policy should be apply on the namespace production  *learnkubenetes/manifests/course1/netpo-prod.yaml*
+
+``` yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy   
+metadata:
+  name: production-deny-ingress    
+  namespace: production #<--- context to apply the policy
+spec:
+  podSelector: {} #<--- means all pods inside the namespace
+  policyTypes:
+  - Ingress #<--- by keeping the list empty, means block all incoming communications regardless the ports. 
+#By ommitting Egress, means accept all outgoing communication
+```
+To apply the network policies:
 
 ```bash
 kubectl create -f ~/learnkubenetes/manifests/course1/netpo-dev.yaml
