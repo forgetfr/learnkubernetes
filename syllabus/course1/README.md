@@ -112,7 +112,7 @@ Address: 10.1.54.75
 
 As you can see **devpod1** as no restriction on **prodpod1**
 
-At this point, all pods in **devpod1-deployment** as no restrictions on any pods in **prodpod1-deployment**. The following table illustrates communications (*ping* and *"ssh"*) between the pods **devpod1-deployment-7bbf94b866-9zhbm** and the two pods **prodpod1-deployment**.
+At this point, all pods in **devpod1-deployment** as no restrictions on any pods in **prodpod1-deployment**. The following table illustrates communications (*ping* and *"ssh"*) between the pods **devpod1-deployment-7bbf94b866-9zhbm** and the two pods in **prodpod1-deployment**.
 
 <table>
 <tr>
