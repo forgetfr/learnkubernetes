@@ -112,12 +112,12 @@ Address: 10.1.54.75
 
 At this point, without any network policies, all pods **devpod1-deployment-\*** is capabled to *ping* and connect to port *ssh* on any pods in **prodpod1-deployment-\*** even if their are in different namespace).
 
-<font size=-2>
+
 <table>
 <tr>
 
 <th>
- devpod1-...-9zhbm -- ping :heavy_check_mark: --> prodpod1-...-4d48z
+ <font size=-2>devpod1-...-9zhbm -- ping :heavy_check_mark: --> prodpod1-...-4d48z</font>
 </th>
 
 <th>
