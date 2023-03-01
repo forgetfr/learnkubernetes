@@ -214,7 +214,8 @@ metadata:
 spec:
   podSelector: {} #<--- means all pods inside the namespace
   policyTypes:
-  - Ingress #<--- by keeping the list empty, means all ports.
+  - Ingress #<--- by keeping the list empty, means block all incoming ports. 
+#By ommitting Egress, means accept all outgoing communication
 ```
 
 
