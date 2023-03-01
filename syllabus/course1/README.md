@@ -111,6 +111,62 @@ Address: 10.1.54.75
 ```
 
 At this point, without any network policies, all pods **devpod1-deployment-\*** is capabled to *ping* and connect to port *ssh* on any pods in **prodpod1-deployment-\*** even if their are in different namespace).
+<table>
+<tr>
+
+<th>
+:heavy_check_mark: devpod1-...-9zhbm -- ping --> prodpod1-...-4d48z
+</th>
+
+<th>
+</th>
+
+</tr>
+<tr>
+
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
+PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=1 ttl=62 time=0.520 ms
+64 bytes from 10.1.54.75 (10.1.54.75): icmp_seq=2 ttl=62 time=0.583 ms
+
+--- 10-1-54-75.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+rtt min/avg/max/mdev = 0.520/0.551/0.583/0.031 ms
+```
+
+</td>
+<td>
+
+```bash
+root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
+PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=1 ttl=63 time=0.031 ms
+64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=2 ttl=63 time=0.055 ms
+
+--- 10-1-83-165.production.pod.cluster.local ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+rtt min/avg/max/mdev = 0.031/0.043/0.055/0.012 ms
+```
+
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+</tr>
+</table>
+
 ```bash
 # ping 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-54-75.production.pod.cluster.local 
@@ -122,14 +178,6 @@ PING 10-1-54-75.production.pod.cluster.local (10.1.54.75) 56(84) bytes of data.
 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
 rtt min/avg/max/mdev = 0.520/0.551/0.583/0.031 ms
 
-root@devpod1-deployment-7bbf94b866-9zhbm:/# ping -c 2 10-1-83-165.production.pod.cluster.local 
-PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data.
-64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=1 ttl=63 time=0.031 ms
-64 bytes from 10.1.83.165 (10.1.83.165): icmp_seq=2 ttl=63 time=0.055 ms
-
---- 10-1-83-165.production.pod.cluster.local ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1003ms
-rtt min/avg/max/mdev = 0.031/0.043/0.055/0.012 ms
 
 # valide port 22 is reachable 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -p 22
