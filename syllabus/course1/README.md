@@ -117,7 +117,7 @@ At this point, without any network policies, all pods **devpod1-deployment-\*** 
 <tr>
 
 <th>
- <font size=2>devpod1-...-9zhbm -- ping  --> prodpod1-...-4d48z</font>
+ devpod1-*(prodpod1-...-4d48z) = TRUE
 </th>
 
 <th>
