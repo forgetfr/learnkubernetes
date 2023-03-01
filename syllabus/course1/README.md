@@ -122,7 +122,7 @@ At this point, all pods in **devpod1-deployment** as no restrictions on any pods
 devpods can ping prodpods :heavy_check_mark:
 </th>
 <th>
-devpods can knock at prodpods door (like 22) :heavy_check_mark:
+devpods can knock at prodpods ports (like 22) :heavy_check_mark:
 </th>
 </tr>
 <tr>
@@ -202,6 +202,20 @@ As soon as you have a *NetworkPolicies* that selects a certain group of Pods, th
 > *NetworkPolicies* are additive, so having two *NetworkPolicies* that select the same Pods will result in allowing both defined policies.
 > 
 > Keep in mind that a *NetworkPolicies*is applied to a particular Namespace and only selects Pods in that particular Namespace.
+
+Let look at the  *learnkubenetes/manifests/course1/netpo-dev.yaml*
+
+``` yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy   
+metadata:
+  name: development-deny-ingress    
+  namespace: development #<--- context to apply the policy
+spec:
+  podSelector: {} #<--- means all pods inside the namespace
+  policyTypes:
+  - Ingress #<--- by keeping the list empty, means all ports.
+```
 
 
 ```bash
