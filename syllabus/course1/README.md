@@ -1,6 +1,6 @@
 # Network Policies in kubernetes
 
-#Table of contents
+## Table of contents
 1. Summary
 2. Prerequisite
 3. The lab
