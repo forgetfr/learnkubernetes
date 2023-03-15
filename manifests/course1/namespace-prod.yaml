@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: production
   labels:
-    name: production
+    purpose: production

@@ -14,18 +14,18 @@ Please read the following instructions on this channel to set up a secure kubern
 
 ```bash
 # create the DEV namespace
-kubectl create -f ~/learnkubenetes/manifests/course1/namespace-dev.yaml
+kubectl create -f ~/learnkubernetes/manifests/course1/namespace-dev.yaml
 # create the PROD namespace
-kubectl create -f ~/learnkubenetes/manifests/course1/namespace-prod.yaml
+kubectl create -f ~/learnkubernetes/manifests/course1/namespace-prod.yaml
 ```
 
 ### Step 2 : deploy two pods on each namespace
 
 ```bash
 # create the DEV pod
-kubectl apply -f ~/learnkubenetes/manifests/course1/deploy-dev.yaml
+kubectl apply -f ~/learnkubernetes/manifests/course1/deploy-dev.yaml
 # create the PROD pod
-kubectl apply -f ~/learnkubenetes/manifests/course1/deploy-prod.yaml
+kubectl apply -f ~/learnkubernetes/manifests/course1/deploy-prod.yaml
 ```
 The containers are based on Ubuntu and provide networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
 
@@ -236,8 +236,8 @@ spec:
 To apply the network policies:
 
 ```bash
-kubectl create -f ~/learnkubenetes/manifests/course1/netpo-dev.yaml
-kubectl create -f ~/learnkubenetes/manifests/course1/netpo-prod.yaml
+kubectl create -f ~/learnkubernetes/manifests/course1/netpo-dev.yaml
+kubectl create -f ~/learnkubernetes/manifests/course1/netpo-prod.yaml
 ```
 
 From now all pods in **devpod1-deployment** are restricted on all pods in **prodpod1-deployment** and vice versa. 
@@ -335,3 +335,10 @@ Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:42 EST
 </td>
 </tr>
 </table>
+
+## Exercice 3 : Allowing only SSH connexion from the default namespace 
+
+### Step 1: We need to add a name=default label on the --namespace=default
+
+kubectl label namespace default name=defaul
+

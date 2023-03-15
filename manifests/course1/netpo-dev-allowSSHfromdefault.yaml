@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: development-accept-ingress-ssh-from-defaultnamespace
+  namespace: development
+spec:
+  podSelector: {}
+  ingress:
+    - ports: 
+        - protocol: TCP
+          port: 22
+      from:
+      - namespaceSelector:
+          matchLabels:
+             name: default
+        podSelector: {}
+      
