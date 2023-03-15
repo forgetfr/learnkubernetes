@@ -5,8 +5,5 @@ metadata:
   namespace: development
 spec:
   podSelector: {}
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels: 
-          purpose: development
+  policyTypes:
+  - Ingress
