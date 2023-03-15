@@ -4,9 +4,11 @@ metadata:
   name: development-deny-ingress
   namespace: development
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: devapp1
   ingress:
   - from:
     - namespaceSelector:
         matchLabels:  
-          name: development
+          purpose: development
