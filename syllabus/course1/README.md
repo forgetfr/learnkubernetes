@@ -3,10 +3,14 @@
 ## Table of contents
 1. Summary
 2. Prerequisite
-3. The lab
-4. [Exercice 1 : Testing the connectivity without policies (default behavior)](#Exercice1)
-5. [Exercice 2 : Blocking cross namespaces communication](#Exercice2)
-6. [Exercice 3 : Allowing only SSH connexion from the default namespace to an another namespace](#Exercice3)
+3. [Cross namespace communication](#CrossName)
+    1. [A simple lab](#createlab1)
+    2. [Exercice 1 : Testing the connectivity without policies (default behavior)](#Exercice1)
+    3. [Exercice 2 : Blocking cross namespaces communication](#Exercice2)
+    4. [Exercice 3 : Allowing only SSH connexion from the default namespace to the development namespace](#Exercice3)
+    5. [Delete the simple lab](#dellab1)
+3. A more complex lab for the next exercice
+8. [Exercice 4 : Segregation within a namespace](#Exercice4)
 
 
 ## Summary: 
@@ -17,9 +21,10 @@ By default, in kubernetes everything is opened. This course will let you underst
 At this point, you should have acces to a kubernetes environment with two nodes (called NODE_A and NODE_B).
 Please read the following instructions on this channel to set up a secure kubernetes virtual environment with a devkit.
 
-## The Lab
+## Cross namespace communication <a name="CrossName"></a>
+### A simple lab <a name="createlab1"></a>
 
-### Step 1 : create two basics namespaces 
+#### Step 1 : create two basics namespaces 
 
 ```bash
 # create the DEV namespace
@@ -28,7 +33,7 @@ kubectl create -f ~/learnkubernetes/manifests/course1/namespace-dev.yaml
 kubectl create -f ~/learnkubernetes/manifests/course1/namespace-prod.yaml
 ```
 
-### Step 2 : deploy two pods on each namespace
+#### Step 2 : deploy two pods on each namespace
 
 ```bash
 # create the DEV pod
@@ -38,7 +43,7 @@ kubectl apply -f ~/learnkubernetes/manifests/course1/deploy-prod.yaml
 ```
 The containers are based on Ubuntu and provide networks tools like *ping, ip, nmap, netstat* and a SSH server and client.
 
-### Step 3 : valide the lab
+#### Step 3 : valide the lab
 Copy the next command in the shell (or *bin/k8s-envls* if you have cloned the entire repository)
 ```bash
 echo "Get namespaces"           && kubectl get namespaces --show-labels | grep -v "^kube"  
@@ -77,7 +82,7 @@ As you can see:
 
 > **_NOTE:_**  IPs are related to the cluster. You should get something different. 
 
-## Exercice 1 : Testing the connectivity without policies (default behavior) <a name="#Exercice1"></a>
+### Exercice 1 : Testing the connectivity without policies (default behavior) <a name="#Exercice1"></a>
 
 Let kick-off a shell in a pod belong to **devpod1-deployment**. 
 
