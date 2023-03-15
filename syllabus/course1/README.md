@@ -1,5 +1,13 @@
 # Network Policies in kubernetes
 
+#Table of contents
+1. Summary
+2. Prerequisite
+3. The lab
+4. Exercice 1
+5. Exercice 2 : Blocking cross namespaces communication  (#Exercice2)
+
+
 ## Summary: 
 By default, in kubernetes everything is opened. This course will let you understand the steps you need to isolated communication within a namespace.
 
@@ -68,7 +76,7 @@ As you can see:
 
 > **_NOTE:_**  IPs are related to the cluster. You should get something different. 
 
-## Exercice 1 : Testing the connectivity without policies (default behavior)
+## Exercice 1 : Testing the connectivity without policies (default behavior) <a name="Exercice1"></a>
 
 Let kick-off a shell in a pod belong to **devpod1-deployment**. 
 
@@ -181,7 +189,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 </tr>
 </table>
 
-## Exercice 2 : Blocking cross namespaces communication
+## Exercice 2 : Blocking cross namespaces communication <a name="Exercice2"></a>
 
 Namespaces are “hidden” from each other, but they are not fully isolated by default. In the previous exercice, we saw  a pod in one Namespace can talk to a pod in another Namespace. This can often be very useful, for example to have your team’s pods in your Namespace communicate with another team’s pods in another Namespace. Generally, we want to control the communications with *NetworkPolicies*. 
 
@@ -347,7 +355,7 @@ Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 </tr>
 </table>
 
-## Exercice 3 : Allowing only SSH connexion from the default namespace 
+## Exercice 3 : Allowing only SSH connexion from the default namespace <a name="Exercice3"></a>
 
 ### Step 1: We need to add a name=default label on the --namespace=default
 
