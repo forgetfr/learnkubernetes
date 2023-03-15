@@ -351,16 +351,18 @@ Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 
 ### Step 1: We need to add a name=default label on the --namespace=default
 
-kubectl label namespace default name=defaul
+```bash
+kubectl label namespace default name=default
+```
 
 ``` yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: development-accept-ingress-ssh-from-defaultnamespace
-  namespace: development
+  namespace: development #<--- namespace to apply the policy
 spec:
-  podSelector: {}
+  podSelector: {} #<--- on all pods
   ingress:
     - ports: 
         - protocol: TCP
