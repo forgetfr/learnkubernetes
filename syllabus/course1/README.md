@@ -77,7 +77,7 @@ As you can see:
 
 > **_NOTE:_**  IPs are related to the cluster. You should get something different. 
 
-## Exercice 1 : Testing the connectivity without policies (default behavior) <a name="Exercice1"></a>
+## Exercice 1 : Testing the connectivity without policies (default behavior) <a name="#Exercice1"></a>
 
 Let kick-off a shell in a pod belong to **devpod1-deployment**. 
 
