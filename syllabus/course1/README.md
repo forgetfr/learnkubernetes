@@ -207,31 +207,39 @@ Let look at the  *learnkubenetes/manifests/course1/netpo-dev.yaml*
 
 ``` yaml
 apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy   
+kind: NetworkPolicy
 metadata:
-  name: development-deny-ingress    
-  namespace: development #<--- context to apply the policy
+  name: development-deny-ingress
+  namespace: development #<--- namespace to apply the policy
 spec:
-  podSelector: {} #<--- means all pods inside the namespace
-  policyTypes:
-  - Ingress #<--- by keeping the list empty, means block all incoming communications regardless the ports. 
-#By ommitting Egress, means accept all outgoing communication
+  podSelector: #<--- on which pods
+    matchLabels:
+      app: devapp1 #<--- those with this label
+  ingress:            
+  - from:  #<-- from who
+    - namespaceSelector:  #<-- from the namespace
+        matchLabels:  
+          purpose: development #<-- having this label
 ```
-This policy will denied all incoming connexions (Ingress), but will not block all outgoing connexions (Egress)
+This policy will limit and accept the incoming connexions only from pods inside the SAME namespace.
 
 The same policy should be apply on the namespace production  *learnkubenetes/manifests/course1/netpo-prod.yaml*
 
 ``` yaml
 apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy   
+kind: NetworkPolicy
 metadata:
-  name: production-deny-ingress    
-  namespace: production #<--- context to apply the policy
+  name: production-deny-ingress
+  namespace: production #<--- namespace to apply the policy
 spec:
-  podSelector: {} #<--- means all pods inside the namespace
-  policyTypes:
-  - Ingress #<--- by keeping the list empty, means block all incoming communications regardless the ports. 
-#By ommitting Egress, means accept all outgoing communication
+  podSelector: #<--- on which pods
+    matchLabels:
+      app: prodapp1 #<--- those with this label
+  ingress:            
+  - from:  #<-- from who
+    - namespaceSelector:  #<-- from the namespace
+        matchLabels:  
+          purpose: production #<-- having this label
 ```
 To apply the network policies:
 
@@ -240,7 +248,7 @@ kubectl create -f ~/learnkubernetes/manifests/course1/netpo-dev.yaml
 kubectl create -f ~/learnkubernetes/manifests/course1/netpo-prod.yaml
 ```
 
-From now all pods in **devpod1-deployment** are restricted on all pods in **prodpod1-deployment** and vice versa. 
+From now, communication are isoled within the namespace. 
 
 The following table illustrates the pods **devpod1-deployment-7bbf94b866-9zhbm** cannot communicate with the two pods in **prodpod1-deployment**.
 <table>
@@ -321,14 +329,14 @@ PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data
 
 ```bash
 root@devpod1-deployment-7bbf94b866-5mq5x:/# nmap 10-1-54-75.production.pod.cluster.local -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:55 EST
-Nmap scan report for 10-1-54-75.production.pod.cluster.local (10.1.54.75)
-Host is up.  <--- normal, we use -Pn
-All 1000 scanned ports on 10-1-54-75.production.pod.cluster.local (10.1.54.75) are filtered
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SStarting Nmap 7.80 ( https://nmap.org ) at 2023-03-15 13:58 EDT
+Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:42 EST
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-15 13:58 EDT
+Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 
 ```
 
