@@ -4,7 +4,9 @@ metadata:
   name: development-accept-ingress-ssh-from-defaultnamespace
   namespace: development
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: devapp1
   ingress:
     - ports: 
         - protocol: TCP
