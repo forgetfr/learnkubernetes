@@ -4,8 +4,9 @@
 1. Summary
 2. Prerequisite
 3. The lab
-4. Exercice 1
-5. Exercice 2 : Blocking cross namespaces communication  (#Exercice2)
+4. [Exercice 1 : Testing the connectivity without policies (default behavior)](#Exercice1)
+5. [Exercice 2 : Blocking cross namespaces communication](#Exercice2)
+6. [Exercice 3 : Allowing only SSH connexion from the default namespace to an another namespace](#Exercice3)
 
 
 ## Summary: 
