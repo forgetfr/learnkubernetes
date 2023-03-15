@@ -284,11 +284,14 @@ PING 10-1-83-165.production.pod.cluster.local (10.1.83.165) 56(84) bytes of data
 
 ```bash
 root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-54-75.production.pod.cluster.local -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:13 EST
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-15 13:58 EDT
+Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 
 root@devpod1-deployment-7bbf94b866-9zhbm:/# nmap 10-1-83-165.production.pod.cluster.local -Pn
-Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-01 10:42 EST
-
+Starting Nmap 7.80 ( https://nmap.org ) at 2023-03-15 13:58 EDT
+Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn
+Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 ```
 
 </td>
