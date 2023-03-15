@@ -8,5 +8,5 @@ spec:
   ingress:
   - from:
     - namespaceSelector:
-        matchLabels: 
-          purpose: development
+        matchLabels:  
+          name: development
