@@ -4,16 +4,16 @@ metadata:
   name: prodpod1-deployment
   namespace: production
   labels:
-    app: prodpod1
+    deploy: prodapp1
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: prodpod1
+      app: prodapp1
   template:
     metadata:
       labels:
-        app: prodpod1
+        app: prodapp1
     spec:
       containers:
       - name: prodctd1
