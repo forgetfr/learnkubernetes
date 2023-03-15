@@ -195,7 +195,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.22 seconds
 </tr>
 </table>
 
-## Exercice 2 : Blocking cross namespaces communication <a name="Exercice2"></a>
+### Exercice 2 : Blocking cross namespaces communication <a name="Exercice2"></a>
 
 Namespaces are “hidden” from each other, but they are not fully isolated by default. In the previous exercice, we saw  a pod in one Namespace can talk to a pod in another Namespace. This can often be very useful, for example to have your team’s pods in your Namespace communicate with another team’s pods in another Namespace. Generally, we want to control the communications with *NetworkPolicies*. 
 
@@ -361,13 +361,14 @@ Nmap done: 1 IP address (0 hosts up) scanned in 4.52 seconds
 </tr>
 </table>
 
-## Exercice 3 : Allowing only SSH connexion from the default namespace <a name="Exercice3"></a>
+### Exercice 3 : Allowing only SSH connexion from the default namespace <a name="Exercice3"></a>
 
-### Step 1: We need to add a name=default label on the --namespace=default
+#### Step 1: We need to add a name=default label on the --namespace=default
 
 ```bash
 kubectl label namespace default name=default
 ```
+#### Step 2: We need to apply a network policy
 
 ``` yaml
 apiVersion: networking.k8s.io/v1
@@ -386,4 +387,15 @@ spec:
           matchLabels:
              name: default  #<---- default namespace
         podSelector: {} #<---- all pods in default namespace.
+```
+
+### Delete the simple lav <a name="dellab1"></a>
+
+To keep a secure environnement, we always should finish by removing the network policies to make sure to not let open ressource.
+
+By deleting a namespace, all ressources within (deployment, pods, policies) will be remove.
+
+```bash
+kubectl delete -f manifests/course1/namespace-dev.yaml 
+kubectl delete -f manifests/course1/namespace-prod.yaml 
 ```
