@@ -8,3 +8,10 @@ spec:
   containers:
   - name: dftctd1
     image: capso/capsonet:latest
+    resources:
+      limits:
+        memory: 600Mi
+        cpu: 1
+      requests:
+        memory: 200Mi
+        cpu: 500m    
