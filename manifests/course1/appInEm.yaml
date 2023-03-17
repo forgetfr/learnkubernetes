@@ -126,5 +126,5 @@ spec:
     - port: 3306
   selector:
     app: bd-inem
-    tier: mysql
+    tier: inem-mysql
   clusterIP: None
