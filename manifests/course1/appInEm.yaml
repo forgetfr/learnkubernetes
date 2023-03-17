@@ -1,3 +1,4 @@
+######################################### namespace
 ---
 # Create the namespace
 apiVersion: v1
@@ -6,7 +7,7 @@ metadata:
   name: ns-srv-inem
   labels:
     purpose: production
-    app: app-inem
+    srv: srv-inem
     owner: ti-sercom
 ---
 # Enforce limit resources within the namespace
@@ -21,6 +22,7 @@ spec:
     requests.memory: 2Gi
     limits.cpu: "8"
     limits.memory: 3Gi
+######################################### frontend
 ---
 # Deploy the web application
 apiVersion: apps/v1
@@ -39,6 +41,7 @@ spec:
     metadata:
       labels:
         app: app-inem
+        tier: frontend
     spec:
       containers:
       - name: app-inem
@@ -53,5 +56,75 @@ spec:
               cpu: 100m
         ports:
         - containerPort: 80
-
-
+          name: app-inem-port
+---
+# Autoscalling the app-inem (alias frontend) if averageUtilization 50
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sc-app-inem
+  namespace: ns-srv-inem
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dp-app-inem
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+---
+# Create a service for the frontend app to expose the application 
+# that is running as one or more Pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: inem
+  namespace: ns-srv-inem
+spec:
+  selector:
+    name: app-inem
+  ports:
+    - name: srv-app-inem
+      protocol: TCP
+      port: 8080
+      targetPort: app-inem-port
+######################################### backend
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pd-bd-inem
+  namespace: ns-srv-inem 
+  labels:
+    tier: backend
+spec:
+  containers:
+  - name: bd-inem
+    image: capso/capsomysql:latest
+    imagePullPolicy: Always
+    resources:
+        limits:
+          memory: 600Mi
+          cpu: 1
+        requests:
+          memory: 300Mi
+          cpu: 100m    
+    ports:
+    - containerPort: 3306
+      name: bd-inem-port
+---
+# Create a service for the mysql
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: ns-srv-inem
+  labels:
+    app: bd-inem
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: bd-inem
+    tier: mysql
+  clusterIP: None

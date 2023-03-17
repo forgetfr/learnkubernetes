@@ -1,5 +1,13 @@
+#!/bin/bash
+
 echo "Get namespaces"     && kubectl get namespaces --show-labels | grep -v "^kube"  
-echo "\nGet deployments"  && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
-echo "\nGet pods"         && kubectl get pods -o wide --show-labels -A | grep -v "^kube"
-echo "\nGet network policies"         && kubectl get networkpolicies.networking.k8s.io -A
-echo "\nGet resources quota"         && kubectl get resourcequota -A
+echo -ne "\nGet deployments\n"  && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
+echo -ne "\nGet pods\n"         && kubectl get pods -o wide --show-labels -A | grep -v "^kube" 
+echo -ne "\nGet network policies\n"       && kubectl get networkpolicies.networking.k8s.io -A
+
+if [ "$1" == "-a" ]
+then
+    echo -ne "\nGet resources quota\n"        && kubectl get resourcequota -A
+    echo -ne "\nGet service\n"                && kubectl get svc -A | grep -v "^kube"
+    echo -ne "\nGet autoscalling\n"           && kubectl get hpa -A
+fi
