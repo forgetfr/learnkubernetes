@@ -69,7 +69,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: dp-app-inem
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 50
 ---
@@ -81,6 +81,7 @@ metadata:
   name: inem
   namespace: ns-srv-inem
 spec:
+  type: LoadBalancer
   selector:
     name: app-inem
   ports:
@@ -117,14 +118,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: inem-mysql
   namespace: ns-srv-inem
   labels:
     app: bd-inem
 spec:
   ports:
-    - port: 3306
+    - name: srv-bd-inem
+      protocol: TCP
+      port: 3306
+      targetPort: bd-inem-port
   selector:
-    app: bd-inem
-    tier: inem-mysql
-  clusterIP: None
+    app: pd-bd-inem
+    tier: backend

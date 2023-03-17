@@ -8,6 +8,6 @@ echo -ne "\nGet network policies\n"       && kubectl get networkpolicies.network
 if [ "$1" == "-a" ]
 then
     echo -ne "\nGet resources quota\n"        && kubectl get resourcequota -A
-    echo -ne "\nGet service\n"                && kubectl get svc -A | grep -v "^kube"
+    echo -ne "\nGet service\n"                && kubectl get svc -A -o wide | grep -v "^kube"
     echo -ne "\nGet autoscalling\n"           && kubectl get hpa -A
 fi
