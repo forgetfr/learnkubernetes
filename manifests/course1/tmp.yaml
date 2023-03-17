@@ -1,57 +1,51 @@
----
 # Create the namespace
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: ns-srv-inem
+  name: tmp
   labels:
     purpose: production
     app: app-inem
     owner: ti-sercom
 ---
-# Enforce limit resources within the namespace
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  name: rq-srv-inem
-  namespace: ns-srv-inem
+  name: rq-tmp
+  namespace: tmp
 spec:
   hard:
     requests.cpu: "4"
-    requests.memory: 2Gi
+    requests.memory: 500Mi
     limits.cpu: "8"
     limits.memory: 3Gi
 ---
-# Deploy the web application
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dp-app-inem
-  namespace: ns-srv-inem
+  name: nginx-deployment
+  namespace: tmp
   labels:
-    deploy: app-inem
+    app: nginx
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: app-inem
+      app: nginx
   template:
     metadata:
       labels:
-        app: app-inem
+        app: nginx
     spec:
       containers:
-      - name: app-inem
-        image: capso/capsoweb:latest
-        imagePullPolicy: Always
+      - name: nginx
+        image: nginx:1.14.2
         resources:
             limits:
-              memory: 600Mi
+              memory: 200Mi
               cpu: 1
             requests:
-              memory: 300Mi
+              memory: 100Mi
               cpu: 100m
         ports:
         - containerPort: 80
-
-
