@@ -89,6 +89,7 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: app-inem-port
+      nodePort: 31080
 ######################################### backend
 ---
 apiVersion: v1
