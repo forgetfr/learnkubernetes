@@ -81,9 +81,9 @@ metadata:
   name: inem
   namespace: ns-srv-inem
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    name: app-inem
+    tier: frontend
   ports:
     - name: srv-app-inem
       protocol: TCP
@@ -120,8 +120,6 @@ kind: Service
 metadata:
   name: inem-mysql
   namespace: ns-srv-inem
-  labels:
-    app: bd-inem
 spec:
   ports:
     - name: srv-bd-inem
@@ -129,5 +127,4 @@ spec:
       port: 3306
       targetPort: bd-inem-port
   selector:
-    app: pd-bd-inem
     tier: backend

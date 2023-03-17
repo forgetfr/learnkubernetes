@@ -1,51 +1,14 @@
-# Create the namespace
 apiVersion: v1
-kind: Namespace
+kind: Service
 metadata:
-  name: tmp
-  labels:
-    purpose: production
-    app: app-inem
-    owner: ti-sercom
----
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: rq-tmp
-  namespace: tmp
+  name: inem
+  namespace: ns-srv-inem
 spec:
-  hard:
-    requests.cpu: "4"
-    requests.memory: 500Mi
-    limits.cpu: "8"
-    limits.memory: 3Gi
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-  namespace: tmp
-  labels:
-    app: nginx
-spec:
-  replicas: 3
+  type: NodePort
   selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.14.2
-        resources:
-            limits:
-              memory: 200Mi
-              cpu: 1
-            requests:
-              memory: 100Mi
-              cpu: 100m
-        ports:
-        - containerPort: 80
+    tier: frontend
+  ports:
+    - name: srv-app-inem
+      protocol: TCP
+      port: 8080
+      targetPort: 80
