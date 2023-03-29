@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # on master node
-sudp apt update && sudo apt -u upgrade 
+sudo apt update && sudo apt -u upgrade 
 sudo timedatectl set-timezone America/Montreal
 sudo timedatectl set-ntp off
 sudo timedatectl set-ntp on
 
 admin="forgetfr"
 sudo snap set system store-certs.cert1="$(cat reverse-proxy.pem)"
-sudo cp reverse-proxy.pem ls -l /etc/ssl/certs/reverse-proxy.pem
+sudo cp reverse-proxy.pem /etc/ssl/certs/reverse-proxy.pem
 
 sudo snap install microk8s --classic --channel=1.26
 sudo usermod -a -G microk8s $admin
@@ -16,17 +16,7 @@ sudo chown -f -R $admin ~/.kubeA
 sudo microk8s enable dashboard dns hostpath-storage 
 
 sudo microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
-sudo microk8s kubectl create token default
-
-
-# everywhereddd
-
-
-
-
-#to add an extra node, on master
-microk8s add-node
-# and run the output with --worker arg on workes nodes
+sudo microk8s kubectl create token default > microk8s-dashboard-token
 
 
 #######
