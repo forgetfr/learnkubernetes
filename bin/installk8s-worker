@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# on worker node
+sudo apt update && sudo apt -u upgrade 
+sudo timedatectl set-timezone America/Montreal
+sudo timedatectl set-ntp off
+sudo timedatectl set-ntp on
+
+admin="forgetfr"
+sudo snap set system store-certs.cert1="$(cat reverse-proxy.pem)"
+sudo cp reverse-proxy.pem /etc/ssl/certs/reverse-proxy.pem
+
+sudo snap install microk8s --classic --channel=1.26
+sudo usermod -a -G microk8s $admin
+sudo chown -f -R $admin ~/.kubeA
+
+# paste the "--worker" output from "microk8s add-node" on the master

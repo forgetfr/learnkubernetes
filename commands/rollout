@@ -1,0 +1,6 @@
+#!/bin/bash
+
+NAMESPACE=$1
+DEPLOYMENT=$2
+
+kubectl -n $NAMESPACE rollout restart deployment $DEPLOYMENT

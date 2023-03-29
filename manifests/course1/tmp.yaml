@@ -1,15 +1,63 @@
+######################################### namespace
+---
+# Create the namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-srv-inem
+  labels:
+    purpose: production
+    srv: srv-inem
+    owner: ti-sercom
+---
+# Enforce limit resources within the namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: rq-srv-inem
+  namespace: ns-srv-inem
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 2Gi
+    limits.cpu: "8"
+    limits.memory: 3Gi
+######################################### backend
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pd-bd-inem
+  namespace: ns-srv-inem 
+  labels:
+    tier: backend
+spec:
+  containers:
+  - name: bd-inem
+    image: capso/capsomysql:latest
+    imagePullPolicy: Always
+    resources:
+        limits:
+          memory: 600Mi
+          cpu: 1
+        requests:
+          memory: 300Mi
+          cpu: 100m    
+    ports:
+    - containerPort: 3306
+      name: bd-inem-port
+---
+# Create a service for the mysql
 apiVersion: v1
 kind: Service
 metadata:
-  name: inem
+  name: inem-mysql
   namespace: ns-srv-inem
 spec:
-  type: NodePort
-  selector:
-    tier: frontend
   ports:
-    - name: srv-app-inem
+    - name: srv-bd-inem
       protocol: TCP
-      port: 8080
-      targetPort: 80
-      nodePort: 31080
+      port: 3306
+      targetPort: bd-inem-port
+  selector:
+    tier: backend

@@ -15,7 +15,12 @@ sudo usermod -a -G microk8s $admin
 sudo chown -f -R $admin ~/.kubeA
 sudo microk8s enable dashboard dns hostpath-storage 
 
+sleep 20 
+
 sudo microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+
+sleep 20
+
 sudo microk8s kubectl create token default > microk8s-dashboard-token
 
 

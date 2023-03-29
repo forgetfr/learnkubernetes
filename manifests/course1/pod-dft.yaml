@@ -1,17 +1,39 @@
+# Create the namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-srv-inem
+  labels:
+    purpose: production
+    srv: srv-inem
+    owner: ti-sercom
+---
 apiVersion: v1
 kind: Pod
 metadata:
   name: dftpod1 
+  namespace: ns-srv-inem
   labels:
     app: dftpod1
 spec:
   containers:
   - name: dftctd1
     image: capso/capsonet:latest
-    resources:
-      limits:
-        memory: 600Mi
-        cpu: 1
-      requests:
-        memory: 200Mi
-        cpu: 500m    
+    ports:
+    - containerPort: 22
+      name: ssh-inem-port
+---
+# Create a service for the mysql
+apiVersion: v1
+kind: Service
+metadata:
+  name: inem-ssh
+  namespace: ns-srv-inem
+spec:
+  ports:
+    - name: srv-ssh-inem
+      protocol: TCP
+      port: 22
+      targetPort: ssh-inem-port
+  selector:
+    app: dftpod1
