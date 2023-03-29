@@ -23,7 +23,7 @@ spec:
     - containerPort: 22
       name: ssh-inem-port
 ---
-# Create a service for the mysql
+# Create a service for cccccthe mysql
 apiVersion: v1
 kind: Service
 metadata:
