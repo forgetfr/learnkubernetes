@@ -143,14 +143,6 @@ spec:
       - namespaceSelector:
           matchLabels: 
             kubernetes.io/metadata.name: kube-system
-        podSelector:
-          matchLabels: 
-            k8s-app: kube-dns
-      ports:
-        - port: 53
-          protocol: TCP
-        - port: 53 
-          protocol: UDP
 ---
 # Allow incoming trafic on port 80 to tier:frontend
 # Allow outgoing trafic on port 3306(MySQL) from tier:frontend to tier:backend
@@ -169,7 +161,9 @@ spec:
   ingress:
     - from:
       - ipBlock:
-          cidr: 0.0.0.0/0
+          cidr: 10.1.163.64/32
+      - ipBlock:
+          cidr: 10.1.34.0/32
       ports:
         - port: 80
           protocol: TCP
