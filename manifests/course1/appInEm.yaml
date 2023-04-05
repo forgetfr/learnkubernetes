@@ -129,3 +129,76 @@ spec:
       targetPort: bd-inem-port
   selector:
     tier: backend
+######################################### NetworkPolicy
+# General rules
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-srv-inem-default
+  namespace: ns-srv-inem
+spec:
+  podSelector: {}
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels: 
+            kubernetes.io/metadata.name: kube-system
+        podSelector:
+          matchLabels: 
+            k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: TCP
+        - port: 53 
+          protocol: UDP
+---
+# Allow incoming trafic on port 80 to tier:frontend
+# Allow outgoing trafic on port 3306(MySQL) from tier:frontend to tier:backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-srv-inem-app
+  namespace: ns-srv-inem
+spec:
+  podSelector:
+    matchLabels:
+      tier: frontend
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+    - from:
+      - ipBlock:
+          cidr: 0.0.0.0/0
+      ports:
+        - port: 80
+          protocol: TCP
+  egress:
+    - to:
+      - podSelector:
+          matchLabels:
+            tier: backend
+      ports: 
+        - port: 3306
+          protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-srv-inem-bd
+  namespace: ns-srv-inem
+spec:
+  podSelector:
+    matchLabels:
+      tier: backend
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            tier: frontend
+      ports:
+        - port: 3306
+          protocol: TCP

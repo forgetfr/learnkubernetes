@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # on worker node
-sudo apt update && sudo apt -u upgrade 
+sudo apt update && sudo apt -y upgrade 
 sudo timedatectl set-timezone America/Montreal
 sudo timedatectl set-ntp off
 sudo timedatectl set-ntp on
