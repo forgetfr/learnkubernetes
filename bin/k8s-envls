@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo "Get namespaces"     && kubectl get namespaces --show-labels | grep -v "^kube"  
+echo "Get nodes "         && kubectl get nodes -o wide  
+echo -ne "\nGet namespaces"     && kubectl get namespaces --show-labels | grep -v "^kube"  
 echo -ne "\nGet deployments\n"  && kubectl get deployments -o wide --show-labels -A | grep -v "^kube"
 echo -ne "\nGet pods\n"         && kubectl get pods -o wide --show-labels -A | grep -v "^kube" 
 echo -ne "\nGet network policies\n"       && kubectl get networkpolicies.networking.k8s.io -A
