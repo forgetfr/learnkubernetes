@@ -5,13 +5,17 @@ sudo apt update && sudo apt -y upgrade
 sudo timedatectl set-timezone America/Montreal
 sudo timedatectl set-ntp off
 sudo timedatectl set-ntp on
+sudo if [ -e "apt list --installed | grep timesyncd" ]; then apt install systemd-timesyncd; fi
+sudo sed -i 's@^#NTP=@NTP=10.123.71.1@g' /etc/systemd/timesyncd.conf
+sudo systemctl restart systemd-timesyncd
+sudo systemctl status systemd-timesyncd
 
-admin="forgetfr"
+admin="ubuntu"
 sudo snap set system store-certs.cert1="$(cat reverse-proxy.pem)"
 sudo cp reverse-proxy.pem /etc/ssl/certs/reverse-proxy.pem
 
 sudo snap install microk8s --classic --channel=1.26
 sudo usermod -a -G microk8s $admin
-sudo chown -f -R $admin ~/.kubeA
+sudo chown -f -R $admin ~/.kube
 
 # paste the "--worker" output from "microk8s add-node" on the master
