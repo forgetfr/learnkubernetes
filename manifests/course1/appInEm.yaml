@@ -129,6 +129,7 @@ spec:
       targetPort: bd-inem-port
   selector:
     tier: backend
+---
 ######################################### NetworkPolicy
 # General rules
 apiVersion: networking.k8s.io/v1
